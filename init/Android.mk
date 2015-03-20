@@ -1,0 +1,54 @@
+#
+# Creates the init.sh script used to toggle between regular and recovery boots
+# on the shinano and aries devices.
+#
+
+LOCAL_PATH:= $(call my-dir)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := init.sh
+LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)/sbin
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_SRC_FILES    := init.sh
+LOCAL_REQUIRED_MODULES := busybox init extract_elf_ramdisk
+
+root_init      := $(TARGET_ROOT_OUT)/init
+root_init_real := $(TARGET_ROOT_OUT)/init.real
+sbin_init_sh   := $(LOCAL_MODULE_PATH)/$(LOCAL_MODULE)
+
+$(LOCAL_MODULE)-post: $(TARGET_ROOT_OUT)/init
+	# If /init is a file and not a symlink then rename it to /init.real
+	# and make /init be a symlink to /sbin/init.sh (which will execute
+	# /init.real, if appropriate.
+	echo "===== BEFORE ====="
+	ls -l $(TARGET_ROOT_OUT)
+	if [ ! -L $(root_init) ]; then \
+	  echo "/init $(root_init) isn't a symlink"; \
+	  mv $(root_init) $(root_init_real); \
+	  ln -s sbin/init.sh $(root_init); \
+	else \
+	  echo "/init $(root_init) is already a symlink"; \
+	fi
+	echo "===== AFTER ====="
+	ls -l $(TARGET_ROOT_OUT)
+	rm -f $(TARGET_ROOT_OUT)/sbin/sh
+	ln -s busybox $(TARGET_ROOT_OUT)/sbin/sh
+
+ALL_DEFAULT_INSTALLED_MODULES += $(LOCAL_MODULE)-post
+
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := busybox
+LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)/sbin
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_SRC_FILES    := busybox
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := extract_elf_ramdisk
+LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)/sbin
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_SRC_FILES    := extract_elf_ramdisk
+include $(BUILD_PREBUILT)
+
