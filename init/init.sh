@@ -47,19 +47,28 @@ KEY_EVENT=/dev/input/event2
 
 busybox mkdir -m 755 /dev/input
 busybox mknod -m 600 ${KEY_EVENT} c 13 67
-busybox cat ${KEY_EVENT} > /dev/key-events &
+
+KEYLOG=key-events.txt
+busybox cat ${KEY_EVENT} > ${KEYLOG} &
 
 led_amber
 
 busybox sleep 3
 busybox pkill -f "cat ${KEY_EVENT}"
 
+# Yes, we really want to enter recovery
+ywrwter=`busybox wc -c <${KEYLOG}`
+echo "key event size is: $ywrwter" >> ${LOG}
+
 # Check for key events, or being explicity asked to go into recovery mode
 # See kernel/arch/arm/mach-msm/restart.c (msm_restart_prepare function) for
 # a mapping of reboot modes to constants.
 warmboot_recovery=0x77665502
 
-if [ -s /dev/key-events ] || busybox grep -q warmboot=${warmboot_recovery} /proc/cmdline; then 
+# Why 32? A kernel bug means that the key event is not null, so
+# we check for a size greater than the buggy value. A real key
+# event will have a size in the hundreds.
+if [ $ywrwter -gt 32 ] || busybox grep -q warmboot=${warmboot_recovery} /proc/cmdline; then
   echo "Entering Recovery mode" >> ${LOG}
   led_orange
   busybox mkdir -m 755 -p /dev/block
