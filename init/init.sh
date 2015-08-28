@@ -21,40 +21,37 @@ busybox mount -t sysfs sysfs /sys
 
 busybox mknod -m 666 /dev/null c 1 3
 
-LED_RED="/sys/class/leds/led:rgb_red/brightness"
-LED_GREEN="/sys/class/leds/led:rgb_green/brightness"
-LED_BLUE="/sys/class/leds/led:rgb_blue/brightness"
+# include device specific vars
+source /sbin/bootrec-device
 
 led_amber() {
-  busybox echo 255 > ${LED_RED}
-  busybox echo 255 > ${LED_GREEN}
-  busybox echo   0 > ${LED_BLUE}
+  busybox echo 255 > ${BOOTREC_LED_RED}
+  busybox echo 255 > ${BOOTREC_LED_GREEN}
+  busybox echo   0 > ${BOOTREC_LED_BLUE}
 }
 
 led_orange() {
-  busybox echo 255 > ${LED_RED}
-  busybox echo 100 > ${LED_GREEN}
-  busybox echo   0 > ${LED_BLUE}
+  busybox echo 255 > ${BOOTREC_LED_RED}
+  busybox echo 100 > ${BOOTREC_LED_GREEN}
+  busybox echo   0 > ${BOOTREC_LED_BLUE}
 }
 
 led_off() {
-  busybox echo   0 > ${LED_RED}
-  busybox echo   0 > ${LED_GREEN}
-  busybox echo   0 > ${LED_BLUE}
+  busybox echo   0 > ${BOOTREC_LED_RED}
+  busybox echo   0 > ${BOOTREC_LED_GREEN}
+  busybox echo   0 > ${BOOTREC_LED_BLUE}
 }
 
-KEY_EVENT=/dev/input/event2
-
 busybox mkdir -m 755 /dev/input
-busybox mknod -m 600 ${KEY_EVENT} c 13 67
+busybox mknod -m 600 ${BOOTREC_EVENT_NODE}
 
 KEYLOG=key-events.txt
-busybox cat ${KEY_EVENT} > ${KEYLOG} &
+busybox cat ${BOOTREC_EVENT} > ${KEYLOG} &
 
 led_amber
 
 busybox sleep 3
-busybox pkill -f "cat ${KEY_EVENT}"
+busybox pkill -f "cat ${BOOTREC_EVENT}"
 
 # Yes, we really want to enter recovery
 ywrwter=`busybox wc -c <${KEYLOG}`
@@ -72,10 +69,10 @@ if [ $ywrwter -gt 32 ] || busybox grep -q warmboot=${warmboot_recovery} /proc/cm
   echo "Entering Recovery mode" >> ${LOG}
   led_orange
   busybox mkdir -m 755 -p /dev/block
-  busybox mknod -m 600 /dev/block/mmcblk0p16 b 179 16
+  busybox mknod -m 600 ${BOOTREC_FOTA_NODE}
   busybox mount -o remount,rw /
   busybox ln -sf /sbin/busybox /sbin/sh
-  extract_elf_ramdisk -i /dev/block/mmcblk0p16 -o /recovery.cpio -t /
+  extract_elf_ramdisk -i ${BOOTREC_FOTA} -o /recovery.cpio -t /
   busybox rm /sbin/sh
   #busybox mkdir /recovery
   #cd /recovery

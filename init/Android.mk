@@ -19,7 +19,7 @@ root_init_real := $(TARGET_ROOT_OUT)/init.real
 	# If /init is a file and not a symlink then rename it to /init.real
 	# and make /init be a symlink to /sbin/init.sh (which will execute
 	# /init.real, if appropriate.
-$(root_init_real): $(root_init)
+$(root_init_real): $(root_init) $(TARGET_ROOT_OUT)/sbin/bootrec-device
 	$(hide) echo "===== BEFORE ====="
 	$(hide) ls -l $(TARGET_ROOT_OUT)
 	$(hide) if [ ! -L $(root_init) ]; then \
