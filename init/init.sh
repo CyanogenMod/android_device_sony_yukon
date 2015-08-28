@@ -79,7 +79,7 @@ if [ -s /dev/key-events ] || busybox grep -q warmboot=${warmboot_recovery} /proc
   # /system/bin to be in the PATH.
   busybox mkdir -p /system/bin
   for app in $(busybox --list); do
-    busybox ln -s /sbin/busybox /system/bin/sh
+    busybox ln -s /sbin/busybox /system/bin/$app
   done
   export _PATH=${_PATH}:/system/bin
 else
