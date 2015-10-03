@@ -74,20 +74,10 @@ if [ $ywrwter -gt 32 ] || busybox grep -q warmboot=${warmboot_recovery} /proc/cm
   busybox ln -sf /sbin/busybox /sbin/sh
   extract_elf_ramdisk -i ${BOOTREC_FOTA} -o /recovery.cpio -t /
   busybox rm /sbin/sh
-  #busybox mkdir /recovery
-  #cd /recovery
   busybox rm init*.rc init*.sh 
   busybox cpio -i -u < /recovery.cpio
   busybox rm init
   busybox rm /recovery.cpio
-  #cd /
-  # adb shell seems to want sh to be in /system/bin/sh, and also wants
-  # /system/bin to be in the PATH.
-  busybox mkdir -p /system/bin
-  for app in $(busybox --list); do
-    busybox ln -s /sbin/busybox /system/bin/$app
-  done
-  export _PATH=${_PATH}:/system/bin
 else
   echo "Booting Normally" >> ${LOG}
 fi
