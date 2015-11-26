@@ -36,7 +36,6 @@ static int boostpulse_fd = -1;
 
 static int current_power_profile = -1;
 static int requested_power_profile = -1;
-static int is_low_power_mode = 0;
 static int is_8928 = -1;
 
 static int is_target_8928()
@@ -124,13 +123,6 @@ static void set_power_profile(int profile)
         return;
     }
 
-    if (is_low_power_mode) {
-        /* Let's assume we get a valid profile */
-        requested_power_profile = profile;
-        ALOGD("%s: low power mode enabled, ignoring profile change request", __func__);
-        return;
-    }
-
     if (profile == current_power_profile)
         return;
 
@@ -154,23 +146,6 @@ static void set_power_profile(int profile)
                     profiles[profile].scaling_max_freq_28 : profiles[profile].scaling_max_freq_26);
 
     current_power_profile = profile;
-}
-
-static void set_low_power_mode(int on)
-{
-    if (on == is_low_power_mode)
-        return;
-
-    ALOGD("%s: state=%d", __func__, on);
-
-    if (on) {
-        requested_power_profile = current_power_profile;
-        set_power_profile(PROFILE_POWER_SAVE);
-        is_low_power_mode = 1;
-    } else {
-        is_low_power_mode = 0;
-        set_power_profile(requested_power_profile);
-    }
 }
 
 static void power_hint(__attribute__((unused)) struct power_module *module,
@@ -206,9 +181,7 @@ static void power_hint(__attribute__((unused)) struct power_module *module,
             break;
 
         case POWER_HINT_LOW_POWER:
-            pthread_mutex_lock(&lock);
-            set_low_power_mode(*(int32_t *)data ? 1 : 0);
-            pthread_mutex_unlock(&lock);
+            /* This hint is handled by the framework */
             break;
 
         case POWER_HINT_SET_PROFILE:
