@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-PRODUCT_VENDOR_KERNEL_HEADERS := device/sony/yukon/kernel-headers
-
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_BOARD_PLATFORM := msm8226
@@ -28,20 +26,27 @@ TARGET_NO_BOOTLOADER := true
 TARGET_NO_RECOVERY := false
 TARGET_NO_KERNEL := false
 
+TARGET_KERNEL_ARCH := arm
+TARGET_KERNEL_SOURCE := kernel/sony/msm
+BOARD_KERNEL_SEPARATED_DT := true
+BUILD_KERNEL := false
+
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 2048
 BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
 BOARD_RAMDISK_OFFSET     := 0x02000000
 
-BOARD_KERNEL_BOOTIMG := true
-BOARD_CUSTOM_MKBOOTIMG := mkqcdtbootimg
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset $(BOARD_RAMDISK_OFFSET) --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
-BOARD_MKBOOTIMG_ARGS += --dt_dir $(OUT)/dtbs --dt_version 2
 
 BOARD_KERNEL_CMDLINE := androidboot.hardware=yukon androidboot.selinux=permissive
 BOARD_KERNEL_CMDLINE += user_debug=31 msm_rtb.filter=0x37
 BOARD_KERNEL_CMDLINE += console=ttyHSL0,115200,n8
 BOARD_KERNEL_CMDLINE += coherent_pool=8M vmalloc=400M
+
+BOARD_USES_QCOM_HARDWARE := true
+TARGET_HAS_NEW_ION_API := true
+QCOM_HARDWARE_DISPLAY_VARIANT := msm8994
+QCOM_HARDWARE_MEDIA_VARIANT := msm8994
 
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -115,9 +120,6 @@ EXTENDED_FONT_FOOTPRINT := true
 ifeq ($(HOST_OS),linux)
     WITH_DEXPREOPT ?= true
 endif
-
-BUILD_KERNEL := true
--include vendor/sony/kernel/KernelConfig.mk
 
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk

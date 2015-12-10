@@ -173,18 +173,16 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     charger_res_images
 
-# AOSP Packages
-PRODUCT_PACKAGES += \
-    InCallUI \
-    Launcher3 \
-    messaging
-
 PRODUCT_PACKAGES += \
     libemoji
 
 # BoringSSL hacks
 PRODUCT_PACKAGES += \
     libboringssl-compat
+
+# Recovery
+PRODUCT_PACKAGES += \
+    init.sh
 
 # APN list
 PRODUCT_COPY_FILES += \
@@ -210,7 +208,3 @@ $(call add-product-dex-preopt-module-config,services,--compiler-filter=speed)
 # Platform specific default properties
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.data.qmi.adb_logmask=0
-
-# Enable MultiWindow
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.debug.multi_window=true
