@@ -40,9 +40,10 @@ LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_MODULE_TAGS  := optional
 LOCAL_SRC_FILES    := extract_elf_ramdisk.c
 LOCAL_FORCE_STATIC_EXECUTABLE := true
+LOCAL_PACK_MODULE_RELOCATIONS := false
 LOCAL_STATIC_LIBRARIES := libelf libc libm libz
 LOCAL_C_INCLUDES := \
-	external/elfutils/0.153/libelf \
+	external/elfutils/src/libelf \
 	external/zlib
 LOCAL_CFLAGS := -g -c -W
 include $(BUILD_EXECUTABLE)
