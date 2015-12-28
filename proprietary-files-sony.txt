@@ -1,0 +1,42 @@
+# Make sure these files are not added from Sony blob zip
+# (we build OSS instead of using a blob):
+# wcnss_service
+
+etc/firmware/cmnlib.b00
+etc/firmware/cmnlib.b01
+etc/firmware/cmnlib.b02
+etc/firmware/cmnlib.b03
+etc/firmware/cmnlib.mdt
+etc/firmware/tzhdcp.b00
+etc/firmware/tzhdcp.b01
+etc/firmware/tzhdcp.b02
+etc/firmware/tzhdcp.b03
+etc/firmware/tzhdcp.mdt
+etc/firmware/tzlibasb.b00
+etc/firmware/tzlibasb.b01
+etc/firmware/tzlibasb.b02
+etc/firmware/tzlibasb.b03
+etc/firmware/tzlibasb.mdt
+etc/firmware/tzsuntory.b00
+etc/firmware/tzsuntory.b01
+etc/firmware/tzsuntory.b02
+etc/firmware/tzsuntory.b03
+etc/firmware/tzsuntory.mdt
+etc/firmware/venus.b00
+etc/firmware/venus.b01
+etc/firmware/venus.b02
+etc/firmware/venus.b03
+etc/firmware/venus.b04
+etc/firmware/venus.mbn
+etc/firmware/venus.mdt
+etc/firmware/wlan/prima/WCNSS_cfg.dat
+etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
+etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+vendor/bin/hci_qcomm_init
+vendor/firmware/keymaster/keymaster.b00
+vendor/firmware/keymaster/keymaster.b01
+vendor/firmware/keymaster/keymaster.b02
+vendor/firmware/keymaster/keymaster.b03
+vendor/firmware/keymaster/keymaster.mdt
+vendor/lib/libadsprpc.so
+vendor/lib/libbtnv.so
