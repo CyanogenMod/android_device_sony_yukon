@@ -182,7 +182,7 @@ PRODUCT_PACKAGES += \
 
 # Recovery
 PRODUCT_PACKAGES += \
-    init.sh
+    init_sony
 
 # Simple PowerHAL
 PRODUCT_PACKAGES += \
