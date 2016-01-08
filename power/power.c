@@ -31,12 +31,38 @@
 #define CPUFREQ_PATH "/sys/devices/system/cpu/cpu0/cpufreq/"
 #define INTERACTIVE_PATH "/sys/devices/system/cpu/cpufreq/interactive/"
 
+static int is_8928 = -1;
+
 static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 static int boostpulse_fd = -1;
 
 static int is_low_power_mode = 0;
 static int current_power_profile = -1;
 static int requested_power_profile = -1;
+
+static int is_target_8928()
+{
+    int fd;
+    char buf[10] = {0};
+
+    if (is_8928 >= 0)
+        return is_8928;
+
+    fd = open("/sys/devices/soc0/soc_id", O_RDONLY);
+    if (fd >= 0) {
+        if (read(fd, buf, sizeof(buf) - 1) == -1) {
+            ALOGW("%s: Unable to read soc_id", __func__);
+            is_8928 = 0;
+        } else {
+            int soc_id = atoi(buf);
+            if (soc_id == 224) {
+            is_8928 = 1; /* Above SOCID for 8928 */
+            }
+        }
+    }
+    close(fd);
+    return is_8928;
+}
 
 static int sysfs_write_str(char *path, char *s)
 {
@@ -149,8 +175,8 @@ static void set_power_profile(int profile)
                     profiles[profile].min_sample_time);
     sysfs_write_str(INTERACTIVE_PATH "target_loads",
                     profiles[profile].target_loads);
-    sysfs_write_int(CPUFREQ_PATH "scaling_max_freq",
-                    profiles[profile].scaling_max_freq;
+    sysfs_write_int(CPUFREQ_PATH "scaling_max_freq", is_target_8928() ?
+                    profiles[profile].scaling_max_freq_28 : profiles[profile].scaling_max_freq_26);
 
     current_power_profile = profile;
 }
