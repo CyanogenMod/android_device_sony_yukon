@@ -34,6 +34,17 @@ $(root_init_real): $(root_init) $(TARGET_ROOT_OUT)/sbin/bootrec-device $(PRODUCT
 ALL_DEFAULT_INSTALLED_MODULES += $(root_init_real)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := static_min_busybox
+LOCAL_MODULE_OWNER := FreeXperia
+LOCAL_SRC_FILES := busybox
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_STEM := busyboxmin
+LOCAL_MODULE_SUFFIX := 
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_MODULE_PATH := $(PRODUCT_OUT)/utilities
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
 LOCAL_MODULE       := extract_elf_ramdisk
 LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)/sbin
 LOCAL_MODULE_CLASS := EXECUTABLES
