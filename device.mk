@@ -21,6 +21,7 @@ DEVICE_PACKAGE_OVERLAYS += \
 
 PRODUCT_COPY_FILES += \
     $(SONY_ROOT)/ueventd.yukon.rc:root/ueventd.yukon.rc \
+    $(SONY_ROOT)/init.class_main.sh:root/init.class_main.sh \
     $(SONY_ROOT)/init.yukon.rc:root/init.yukon.rc \
     $(SONY_ROOT)/init.yukon.usb.rc:root/init.yukon.usb.rc \
     $(SONY_ROOT)/init.yukon.pwr.rc:root/init.yukon.pwr.rc \
