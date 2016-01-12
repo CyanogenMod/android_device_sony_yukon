@@ -114,6 +114,9 @@ TARGET_SYSTEM_PROP := device/sony/yukon/system.prop
 # NFC
 NFC_NXP_CHIP_TYPE := PN547C2
 
+# Releasetools
+TARGET_RELEASETOOLS_EXTENSIONS := device/sony/yukon/releasetools
+
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
 
