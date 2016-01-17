@@ -37,7 +37,10 @@
 
 #include "init_msm.h"
 
+#include "variants.h"
+
 static int dual_sim = 0;
+char model[PROP_VALUE_MAX];
 
 static void import_cmdline(char *name, int for_emulator)
 {
@@ -53,19 +56,68 @@ static void import_cmdline(char *name, int for_emulator)
     }
 }
 
+void ds_properties()
+{
+    property_set("persist.radio.multisim.config", "dsds");
+    property_set("ro.telephony.default_network", "0,1");
+    property_set("ro.telephony.ril.config", "simactivation");
+}
+
+void variant_from_prop()
+{
+    int variantID = 0;
+
+    // strip first character
+    strcpy(model, &model[1]);
+
+    while((int)model != variants[variantID][0])
+        variantID++;
+
+    property_set("ro.product.model", model);
+
+    if (variants[variantID][1]) { // DS
+        ds_properties();
+    } else if (variants[variantID][2]) { // LTE
+        property_set("ro.telephony.default_network", "9");
+    } else {
+        property_set("ro.telephony.default_network", "0");
+    }
+
+}
+
+void variant_from_cmdline()
+{
+    import_kernel_cmdline(0, import_cmdline);
+
+    if (dual_sim) {
+        unsigned int variantID = 0;
+        const char* letter = "D"; // Model prefix
+        char modelNo[PROP_VALUE_MAX];
+
+        while(variants[variantID][1] != 1 && variantID < sizeof(variants)/(sizeof (variants[0])))
+            variantID++;
+
+        sprintf(modelNo, "%d", variants[variantID][0]);
+        strcpy(model, letter);
+        strcat(model, modelNo);
+
+        property_set("ro.product.model", model);
+        ds_properties();
+    } else {
+        property_set("ro.telephony.default_network", "9");
+    }
+}
 void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
 {
     UNUSED(msm_id);
     UNUSED(msm_ver);
     UNUSED(board_type);
 
-    import_kernel_cmdline(0, import_cmdline);
-    if (dual_sim == 1) {
-        property_set("persist.radio.multisim.config", "dsds");
-        property_set("ro.telephony.default_network", "0,1");
-        property_set("ro.telephony.ril.config", "simactivation");
+    property_get("ro.fxp.variant", model);
+
+    if (strcmp(model, "")) {
+        variant_from_prop();
     } else {
-        property_set("ro.telephony.default_network", "9");
+        variant_from_cmdline();
     }
 }
-
