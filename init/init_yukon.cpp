@@ -37,21 +37,7 @@
 
 #include "init_msm.h"
 
-static int dual_sim = 0;
-
-static void import_cmdline(char *name, int for_emulator)
-{
-    char *value = strchr(name, '=');
-    int name_len = strlen(name);
-
-    if (value == 0) return;
-    *value++ = 0;
-    if (name_len == 0) return;
-
-    if (!strcmp(name,"oemandroidboot.phoneid") && (strlen(value) > 30) ) {
-        dual_sim = 1;
-    }
-}
+#include "variants.h"
 
 void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
 {
@@ -59,13 +45,34 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     UNUSED(msm_ver);
     UNUSED(board_type);
 
-    import_kernel_cmdline(0, import_cmdline);
-    if (dual_sim == 1) {
-        property_set("persist.radio.multisim.config", "dsds");
-        property_set("ro.telephony.default_network", "0,1");
-        property_set("ro.telephony.ril.config", "simactivation");
-    } else {
-        property_set("ro.telephony.default_network", "9");
+    char model[PROP_VALUE_MAX];
+    int variantID = -1;
+    int m_number = 0;
+
+    property_get("ro.fxp.variant", model);
+
+    // make family letter uppercase
+    model[0] -= 32;
+
+    // strip first character
+    sscanf(&model[1], "%d", &m_number);
+
+    for (int i = 0; i < (signed)(sizeof(variants)/(sizeof(variants[0]))); i++) {
+        if (m_number == variants[i][0])
+            variantID = i;
+    }
+
+    property_set("ro.product.model", model);
+
+    if (variantID > 0) {
+        if (variants[variantID][1]) { // DS
+            property_set("persist.radio.multisim.config", "dsds");
+            property_set("ro.telephony.default_network", "0,1");
+            property_set("ro.telephony.ril.config", "simactivation");
+        } else if (variants[variantID][2]) { // LTE
+            property_set("ro.telephony.default_network", "9");
+        } else {
+            property_set("ro.telephony.default_network", "0");
+        }
     }
 }
-
