@@ -22,7 +22,6 @@
 #include <unistd.h>
 
 #include "init_board.h"
-#include "init_prototypes.h"
 
 // Main: executable
 int main(int __attribute__((unused)) argc, char** __attribute__((unused)) argv)

@@ -182,7 +182,7 @@ PRODUCT_PACKAGES += \
 
 # Recovery
 PRODUCT_PACKAGES += \
-    init_sony
+    preboot
 
 # Simple PowerHAL
 PRODUCT_PACKAGES += \

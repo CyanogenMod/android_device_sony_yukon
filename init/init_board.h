@@ -17,8 +17,11 @@
 #ifndef __INIT_BOARD_H__
 #define __INIT_BOARD_H__
 
-#include "init_board_common.h"
-#include "init_prototypes.h"
+#include "init_functions.h"
+
+// Constants: file paths
+#define EXEC_TOYBOX "/sbin/toybox"
+#define SBIN_CPIO_RECOVERY "/sbin/ramdisk-recovery.cpio"
 
 // Constants: devices controls
 #ifndef DEV_BLOCK_PATH

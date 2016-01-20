@@ -21,9 +21,16 @@
 #include <unistd.h>
 
 #include <base/file.h>
+#include <sys/wait.h>
 #include <string>
 
-#include "init_prototypes.h"
+#include "init_functions.h"
+
+// Constants: buffer max length
+#define CMD_MAX_LENGTH 80
+
+// Global: Shared buffer
+char buffer[CMD_MAX_LENGTH];
 
 // Function: search string in file
 bool file_contains(const char* path, const char* needle)
@@ -62,4 +69,20 @@ void dir_unlink_r(const char* path_dir, bool rm_top, bool child)
     if (child || rm_top) {
         rmdir(path_dir);
     }
+}
+
+// Function: binary execution
+int system_exec(const char* argv[])
+{
+    int status = -1;
+    pid_t pid;
+
+    pid = fork();
+    if (pid == 0) {
+        execv(argv[0], const_cast<char* const*>(&argv[0]));
+        _exit(1);
+    }
+
+    waitpid(pid, &status, 0);
+    return status;
 }
