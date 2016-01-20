@@ -17,7 +17,6 @@
 #include <stdio.h>
 
 #include <fcntl.h>
-#include <time.h>
 #include <unistd.h>
 
 #include "init_prototypes.h"
@@ -27,47 +26,3 @@
 
 // Global: Shared buffer
 char buffer[CMD_MAX_LENGTH];
-
-// Function: int to path
-void write_int(const char* path, int value)
-{
-    int fd, bytes;
-
-    fd = open(path, O_CREAT | O_RDWR);
-    if (fd >= 0) {
-        bytes = snprintf(buffer, sizeof(buffer), "%d\n", value);
-        write(fd, buffer, bytes);
-        close(fd);
-    }
-}
-
-// Function: string to path
-void write_string(const char* path, const char* value, bool append)
-{
-    int fd, bytes;
-
-    fd = open(path, O_CREAT | O_RDWR | (append ? O_APPEND : 0));
-    if (fd >= 0) {
-        bytes = snprintf(buffer, sizeof(buffer), "%s\n", value);
-        write(fd, buffer, bytes);
-        close(fd);
-    }
-}
-
-// Function: date to path
-void write_date(const char* path, bool append)
-{
-    int fd, bytes;
-    struct tm* time_info;
-    time_t time_raw;
-
-    fd = open(path, O_CREAT | O_RDWR | (append ? O_APPEND : 0));
-    if (fd >= 0) {
-        time(&time_raw);
-        time_info = localtime(&time_raw);
-        bytes = strftime(buffer, sizeof(buffer), "%a %b %e %H:%M:%S %Z %Y\n",
-                time_info);
-        write(fd, buffer, bytes);
-        close(fd);
-    }
-}

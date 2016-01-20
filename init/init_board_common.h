@@ -20,38 +20,7 @@
 #include "init_prototypes.h"
 
 // Constants: file paths
-#define BOOT_TXT "/boot.txt"
-#define EXEC_KEYCHECK "/sbin/keycheck"
 #define EXEC_TOYBOX "/sbin/toybox"
-#define SBIN_CPIO_ANDROID "/sbin/ramdisk.cpio"
 #define SBIN_CPIO_RECOVERY "/sbin/ramdisk-recovery.cpio"
-
-// Constants: keycheck commands
-#define KEYCHECK_RECOVERY_BOOT (41 << 8)
-#define KEYCHECK_RECOVERY_FOTA (42 << 8)
-
-// Class: init_board_common
-class init_board_common
-{
-protected:
-    init_board_common() {}
-    virtual ~init_board_common() { }
-
-public:
-    // Board: start init execution
-    virtual void start_init() { }
-
-    // Board: introduction for keycheck
-    virtual void introduce_keycheck() { }
-
-    // Board: introduction for Android
-    virtual void introduce_android() { }
-
-    // Board: introduction for Recovery
-    virtual void introduce_recovery() { }
-
-    // Board: finish init execution
-    virtual void finish_init() { }
-};
 
 #endif // __INIT_BOARD_COMMON_H__

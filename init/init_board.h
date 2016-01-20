@@ -18,7 +18,6 @@
 #define __INIT_BOARD_H__
 
 #include "init_board_common.h"
-#include <init_sony/init_board_device.h>
 #include "init_prototypes.h"
 
 // Constants: devices controls
@@ -31,20 +30,8 @@
 #ifndef DEV_BLOCK_MINOR
 #define DEV_BLOCK_MINOR 0
 #endif
-#ifndef DEV_BLOCK_FOTA_NUM
-#define DEV_BLOCK_FOTA_NUM -1
-#endif
 #ifndef DEV_BLOCK_FOTA_PATH
-#define DEV_BLOCK_FOTA_PATH DEV_BLOCK_PATH "p" STR(DEV_BLOCK_FOTA_NUM)
-#endif
-#ifndef DEV_INPUT_EVENTS
-#define DEV_INPUT_EVENTS "/dev/input/event%u"
-#endif
-#ifndef DEV_INPUT_MAJOR
-#define DEV_INPUT_MAJOR 13
-#endif
-#ifndef DEV_INPUT_MINOR_BASE
-#define DEV_INPUT_MINOR_BASE 64
+#define DEV_BLOCK_FOTA_PATH DEV_BLOCK_PATH "p" DEV_BLOCK_FOTA_NUM
 #endif
 
 // Constants: warmboot commands
@@ -53,11 +40,6 @@
 #endif
 #ifndef WARMBOOT_RECOVERY
 #define WARMBOOT_RECOVERY "warmboot=0x77665502"
-#endif
-
-// Constants: init configurations
-#ifndef KEYCHECK_TIMEOUT
-#define KEYCHECK_TIMEOUT 3
 #endif
 
 #endif // __INIT_BOARD_H__

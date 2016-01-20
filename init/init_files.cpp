@@ -25,34 +25,6 @@
 
 #include "init_prototypes.h"
 
-// Function: file existence check
-bool file_exists(const char* path)
-{
-    int fd, res = false;
-
-    fd = open(path, O_RDONLY);
-    if (fd >= 0) {
-        res = true;
-        close(fd);
-    }
-
-    return res;
-}
-
-// Function: empty file check
-bool file_empty(const char* path)
-{
-    int fd, res = false;
-
-    fd = open(path, O_RDONLY);
-    if (fd >= 0) {
-        res = (lseek(fd, 0, SEEK_END) == 0);
-        close(fd);
-    }
-
-    return res;
-}
-
 // Function: search string in file
 bool file_contains(const char* path, const char* needle)
 {

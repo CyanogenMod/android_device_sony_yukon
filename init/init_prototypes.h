@@ -19,27 +19,12 @@
 
 #include <unistd.h>
 
-// Macro: expansion to string
-#define STR(x) #x
-
-// Macro: milliseconds sleep
-#define msleep(_MILLIS_) usleep(_MILLIS_ * 1000)
-
 // Prototypes: files and dirs controls
-bool file_exists(const char* path);
-bool file_empty(const char* path);
 bool file_contains(const char* path, const char* needle);
 void dir_unlink_r(const char* path_dir, bool rm_top, bool child = false);
 
-// Prototypes: files outputs
-void write_int(const char* path, int value);
-void write_string(const char* path, const char* value, bool append = false);
-void write_date(const char* path, bool append = false);
-
 // Prototypes: binary executions
 int system_exec(const char* argv[]);
-pid_t system_exec_bg(const char* argv[]);
-int system_exec_kill(pid_t pid, uint8_t timeout = 0);
 
 // Prototype: elf ramdisk extraction
 int extract_ramdisk(int argc, const char** argv);

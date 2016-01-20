@@ -1,6 +1,7 @@
 #
-# Creates the init.sh script used to toggle between regular and recovery boots
-# on the shinano and aries devices.
+# A preboot executable used to toggle between regular and recovery boots
+# Define the device specific FOTA node with:
+#     TARGET_DEV_BLOCK_FOTA_NUM := "NODE"
 #
 
 LOCAL_PATH:= $(call my-dir)
@@ -18,6 +19,8 @@ LOCAL_CPPFLAGS := \
     -Wall \
     -Wextra \
     -Werror
+
+LOCAL_CPPFLAGS += -DDEV_BLOCK_FOTA_NUM=\"$(TARGET_DEV_BLOCK_FOTA_NUM)\"
 
 LOCAL_MODULE := init_sony
 LOCAL_MODULE_TAGS := optional
