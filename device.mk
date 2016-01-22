@@ -76,7 +76,7 @@ PRODUCT_COPY_FILES += \
 
 # Variant linking script
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/releasetools/firmware.sh:install/bin/firmware.sh
+    device/sony/yukon/releasetools/firmware.sh:install/bin/firmware.sh
 
 # Audio
 PRODUCT_PACKAGES += \
