@@ -70,6 +70,10 @@ MAX_EGL_CACHE_SIZE := 2048*1024
 OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 
+# preboot
+BOARD_VENDOR := sony
+BOARD_INIT_NO_KEYCHECK := true
+
 # init
 TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_LIBINIT_DEFINES_FILE := device/sony/yukon/init/init_yukon.cpp
