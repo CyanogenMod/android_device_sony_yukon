@@ -187,7 +187,8 @@ PRODUCT_PACKAGES += \
 
 # Recovery
 PRODUCT_PACKAGES += \
-    init.sh
+    init_sony \
+    toybox_static
 
 # Simple PowerHAL
 PRODUCT_PACKAGES += \
