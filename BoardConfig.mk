@@ -78,6 +78,7 @@ NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 # init
 TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_LIBINIT_DEFINES_FILE := device/sony/yukon/init/init_yukon.cpp
+TARGET_UNIFIED_DEVICE := true
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
