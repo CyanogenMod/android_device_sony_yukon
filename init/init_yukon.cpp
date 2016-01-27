@@ -46,10 +46,12 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     UNUSED(board_type);
 
     char model[PROP_VALUE_MAX];
+    char codename[PROP_VALUE_MAX];
     int variantID = -1;
     int m_number = 0;
 
     property_get("ro.fxp.variant", model);
+    property_get("ro.cm.device", codename);
 
     // make family letter uppercase
     model[0] -= 32;
@@ -63,6 +65,7 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     }
 
     property_set("ro.product.model", model);
+    property_set("ro.product.device", codename);
 
     if (variantID > 0) {
         if (variants[variantID][1]) { // DS
