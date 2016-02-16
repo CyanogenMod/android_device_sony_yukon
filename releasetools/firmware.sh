@@ -14,8 +14,7 @@ variant=`ls /lta-label/*.html | sed s/.*-elabel-// | sed s/-row.html// | tr -d '
 umount /lta-label
 
 # Set the variant as a prop
-touch /system/vendor/build.prop
-echo ro.fxp.variant=$variant >> /system/vendor/build.prop
+echo ro.fxp.variant=$variant >> /system/build.prop
 
 if [ $deviceid == "tianchi" ] || [ $deviceid == "flamingo" ]; then
     # Symlink the correct modem blobs
